@@ -25,6 +25,7 @@ frappe.ui.form.on("Sales Order", {
 					frm: frm,
 					child_docname: "items",
 					child_doctype: "Sales Order Detail",
+					cannot_add_row: false,
 				})
 			});
 		}
@@ -423,7 +424,7 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 							filters: {'parent': me.frm.doc.name}
 						}
 					}},
-				
+
 				{"fieldtype": "Button", "label": __("Make Purchase Order"), "fieldname": "make_purchase_order", "cssClass": "btn-primary"},
 			]
 		});
