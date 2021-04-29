@@ -11,9 +11,9 @@ from frappe.utils import (flt, getdate, get_url, now,
 from erpnext.controllers.queries import get_filters_cond
 from frappe.desk.reportview import get_match_cond
 from erpnext.hr.doctype.daily_work_summary.daily_work_summary import get_users_email
-from erpnext.hr.doctype.holiday_list.holiday_list import is_holiday
+#from erpnext.hr.doctype.holiday_list.holiday_list import is_holiday
 from frappe.model.document import Document
-from erpnext.education.doctype.student_attendance.student_attendance import get_holiday_list
+#from erpnext.education.doctype.student_attendance.student_attendance import get_holiday_list
 
 class Project(Document):
 	def get_feed(self):
@@ -89,6 +89,9 @@ class Project(Document):
 		return self.update_if_holiday(self.end_date)
 
 	def update_if_holiday(self, date):
+		from erpnext.education.doctype.student_attendance.student_attendance import get_holiday_list
+		from erpnext.hr.doctype.holiday_list.holiday_list import is_holiday
+
 		holiday_list = self.holiday_list or get_holiday_list(self.company)
 		while is_holiday(holiday_list, date):
 			date = add_days(date, 1)
@@ -417,6 +420,8 @@ def get_projects_for_collect_progress(frequency, fields):
 		filters = {'collect_progress': 1, 'frequency': frequency, 'status': 'Open'})
 
 def send_project_update_email_to_users(project):
+	from erpnext.hr.doctype.holiday_list.holiday_list import is_holiday
+
 	doc = frappe.get_doc('Project', project)
 
 	if is_holiday(doc.holiday_list) or not doc.users: return
